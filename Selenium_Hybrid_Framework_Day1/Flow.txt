@@ -1,0 +1,31 @@
+Page Object Model
+
+- We locate Object by using @FindBy() or @FindBys() annotation
+
+- FindBy() Annotation used to Locate Single Object
+
+- FindBys() Annotation used to Locate Multiple Objects 
+
+- We Initialize these elements by using PageFactory.initElements(driver,this) keyword in constructor
+
+
+===========================================================
+
+01. In src/main/java we create packages like
+	a. BaseLayer
+		- We create BaseTest Class
+		- In BaseTest Class we only write Initialization steps like, Driver methods, Wait Methods
+		
+	b. PagesLayer
+		- We create LoginPage Class
+		- In LoginPage Class
+			1. We Locate Object Repository using Page Object Design pattern with Page Factory
+			2. Initialize Object Repository
+			3. Associated Method Without Entering Test Data
+
+
+02. In src/test/java we create packages like
+	a. TestLayer
+		- We Create LoginPageTest class
+		- We write actual test here
+	

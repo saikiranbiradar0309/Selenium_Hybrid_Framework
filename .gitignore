@@ -1,0 +1,124 @@
+# ==========================================
+# macOS System Files
+# ==========================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ==========================================
+# Java Compiled Files
+# ==========================================
+*.class
+*.jar
+*.war
+*.ear
+
+# ==========================================
+# Build Output - Maven / Gradle
+# ==========================================
+**/target/
+**/build/
+**/out/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==========================================
+# Eclipse IDE
+# ==========================================
+.metadata/
+**/.metadata/
+.settings/
+**/.settings/
+.project
+**/.project
+.classpath
+**/.classpath
+.factorypath
+
+# ==========================================
+# IntelliJ IDEA
+# ==========================================
+.idea/
+**/.idea/
+*.iml
+*.ipr
+*.iws
+
+# ==========================================
+# Visual Studio Code
+# ==========================================
+.vscode/
+**/.vscode/
+
+# ==========================================
+# TestNG Reports
+# ==========================================
+test-output/
+**/test-output/
+surefire-reports/
+**/surefire-reports/
+failsafe-reports/
+**/failsafe-reports/
+
+# ==========================================
+# Automation Reports
+# ==========================================
+allure-results/
+allure-report/
+extent-reports/
+reports/
+screenshots/
+**/screenshots/
+*.html.tmp
+
+# ==========================================
+# Logs
+# ==========================================
+*.log
+logs/
+**/logs/
+
+# ==========================================
+# Temporary Files
+# ==========================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+hs_err_pid*
+replay_pid*
+
+# ==========================================
+# Environment Variables and Secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+!.env.template
+secrets/
+credentials.json
+**/credentials.json
+**/*-credentials.json
+
+# ==========================================
+# Local Configuration Overrides
+# ==========================================
+config-local.properties
+application-local.properties
+
+# ==========================================
+# Test Data - Ignore Only Sensitive Data
+# ==========================================
+# Do not ignore all test data.
+# Commit sample test data and non-sensitive test fixtures.
+# Keep real credentials and production data out of Git.
+
+# ==========================================
+# Operating System / IDE Backup Files
+# ==========================================
+Thumbs.db
+Desktop.ini
+*.bak
+*.orig
