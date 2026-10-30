@@ -1,0 +1,1069 @@
+In today's class we followed below approach
+
+----------------------------------------------
+
+01. First create below packages
+		--> Inside src/main/java create Base, Pages Packages
+		--> Inside src/test/java create Test Package
+
+		
+===================================================
+
+02. Inside Base Package create BaseTest class
+
+package base;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class BaseTest {
+	
+	public static WebDriver driver;
+	
+	public static void initialization(String browser)
+	{
+		
+		// Driver Factory Design Pattern
+		if(browser.equalsIgnoreCase("CHROME"))
+		{
+			driver = new ChromeDriver();
+		}
+		
+		else if(browser.equalsIgnoreCase("EDGE"))
+		{
+			driver = new EdgeDriver();
+		}
+		
+		
+		else if(browser.equalsIgnoreCase("FIREFOX"))
+		{
+			driver = new FirefoxDriver();
+		}
+		
+		else if(browser.equalsIgnoreCase("HEADLESS"))
+		{
+			 ChromeOptions options = new ChromeOptions();
+			 options.addArguments("--headless");
+			 driver = new ChromeDriver(options);
+		}
+			
+		else if(browser.equalsIgnoreCase("INCOGNITO"))
+		{
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--incognito");
+			driver = new ChromeDriver(options);
+		}
+		
+		
+		else 
+		{
+			throw new IllegalStateException("Invalid Browser");
+		}
+	}
+}	
+
+
+----------------------------------------------
+
+
+And We also create utils Package inside src/main/java
+	--> And inside that package we create a class called DriverFactory
+
+	
+So we copy the initialization code from BaseTest and Paste it in DriverFactory
+
+So now the final DriverFactory class looks like below
+
+package utils;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class DriverFactory {
+	
+	// Driver Factory Design Pattern :: We maintain all driver setup in centralized location
+	public static WebDriver setDriver(String browser)
+	{
+		// Driver Factory Design Pattern
+				if(browser.equalsIgnoreCase("CHROME"))
+				{
+					return new ChromeDriver();
+				}
+				
+				else if(browser.equalsIgnoreCase("EDGE"))
+				{
+					return new EdgeDriver();
+				}
+				
+				
+				else if(browser.equalsIgnoreCase("FIREFOX"))
+				{
+					return new FirefoxDriver();
+				}
+				
+				else if(browser.equalsIgnoreCase("HEADLESS"))
+				{
+					 ChromeOptions options = new ChromeOptions();
+					 options.addArguments("--headless");
+					 return new ChromeDriver(options);
+				}
+					
+				else if(browser.equalsIgnoreCase("INCOGNITO"))
+				{
+					ChromeOptions options = new ChromeOptions();
+					options.addArguments("--incognito");
+					return new ChromeDriver(options);
+				}
+				
+				
+				else 
+				{
+					throw new IllegalStateException("Invalid Browser");
+				}
+	}
+}
+
+----------------------------------------------
+
+And Now the BaseTest class looks like below
+
+
+package base;
+
+import java.time.Duration;
+
+import org.openqa.selenium.WebDriver;
+
+
+import utils.DriverFactory;
+
+public class BaseTest {
+	
+	public static WebDriver driver;
+	
+	public static void initialization(String browser)
+	{
+		
+		driver = DriverFactory.setDriver(browser);
+		
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		
+		driver.manage().window().maximize();
+		
+		driver.get("https://demo.guru99.com/test/newtours/register.php");
+		
+	}
+}	
+
+
+===================================================
+
+
+03. Inside pages Package
+		--> Create RegisterPage Class
+
+package pages;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
+
+import base.BaseTest;
+
+public class RegisterPage extends BaseTest{
+
+	// POM Design Pattern
+	
+	@FindBy(name = "firstName")
+	WebElement firstName;
+	
+	@FindBy(name = "lastName")
+	WebElement lastName;
+	
+	@FindBy(name = "phone")
+	WebElement phone;
+	
+	@FindBy(name = "userName")
+	WebElement email;
+	
+	@FindBy(name = "address1")
+	WebElement address;
+	
+	@FindBy(name = "city")
+	WebElement city;
+	
+	@FindBy(name = "state")
+	WebElement state;
+	
+	@FindBy(name = "postalCode")
+	WebElement postalCode;
+	
+	@FindBy(name = "country")
+	WebElement country;
+	
+	@FindBy(name = "email")
+	WebElement username;
+	
+	@FindBy(name = "password")
+	WebElement password;
+	
+	@FindBy(name = "confirmPassword")
+	WebElement confirmPassword;
+	
+	@FindBy(name = "submit")
+	WebElement submit;
+	
+	
+	
+	
+	// Initialize Object Repository
+	public RegisterPage()
+	{
+		PageFactory.initElements(driver, this);
+	}
+	
+	
+	
+	// Create Associated Methods
+	public void enterFirstName(String fname)
+	{
+		this.firstName.sendKeys(fname);
+	}
+	
+	
+	public void enterLastName(String lname)
+	{
+		this.lastName.sendKeys(lname);
+	}
+	
+	
+	public void enterPhone(String phone)
+	{
+		this.phone.sendKeys(phone);
+	}
+	
+	
+	public void enterEmail(String mail)
+	{
+		this.email.sendKeys(mail);
+	}
+	
+	public void enterAddress(String addr)
+	{
+		this.address.sendKeys(addr);
+	}
+	
+	public void enterCity(String city)
+	{
+		this.city.sendKeys(city);
+	}
+	
+	public void enterState(String state)
+	{
+		this.state.sendKeys(state);
+	}
+	
+	public void enterPostalCode(String postal)
+	{
+		this.postalCode.sendKeys(postal);
+	}
+	
+	public void enterCountry(String country)
+	{
+		Select sel = new Select(this.country);
+		sel.selectByVisibleText(country);
+		
+	}
+	
+	public void enterUsername(String uname)
+	{
+		this.username.sendKeys(uname);
+	}
+	
+	public void enterPassword(String pass)
+	{
+		this.password.sendKeys(pass);
+	}
+	
+	public void enterConfirmPassword(String confirmPass)
+	{
+		this.confirmPassword.sendKeys(confirmPass);
+	}
+	
+	public void clickOnSubmit()
+	{
+		this.submit.click();
+	}
+}
+
+
+===================================================
+
+
+04. Inside test Package
+		--> Create RegisterPageTest class 
+
+
+
+package test;
+
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import base.BaseTest;
+import pages.RegisterPage;
+
+public class RegisterPageTest {
+	
+	
+	@Parameters({"browser"})
+	@BeforeTest
+	public void setup(String browser)
+	{
+		BaseTest.initialization(browser);
+	}
+	
+	
+	@Test
+	public void validateRegisterNewUserFunctionality() throws InterruptedException
+	{
+		RegisterPage registerPage = new RegisterPage();
+		registerPage.enterFirstName("Saikiran");
+		registerPage.enterLastName("Biradar");
+		registerPage.enterPhone("6767676767");
+		registerPage.enterEmail("sai@gmail.com");
+		registerPage.enterAddress("BTM Layout Bengaluru");
+		registerPage.enterCity("Bengaluru");
+		registerPage.enterState("Karnataka");
+		registerPage.enterPostalCode("560068");
+		registerPage.enterCountry("INDIA");
+		registerPage.enterUsername("sai@gmail.com");
+		registerPage.enterPassword("Sai@123");
+		registerPage.enterConfirmPassword("Sai@123");
+		
+		Thread.sleep(5000);
+		
+		registerPage.clickOnSubmit();
+	}
+	
+	
+	@AfterTest
+	public void tearDown()
+	{
+		BaseTest.driver.quit();
+	}
+}
+
+
+----------------------------------------------
+
+
+Create an XML File for this class
+
+	--> Right Click --> TestNG --> Convert To TestNG
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+
+<suite name="Suite">
+
+
+  <test name="Test">
+  	
+  	<parameter name="browser" value="chrome"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  
+</suite> 
+
+
+
+To use firefox or any other browser just change the value in parameter
+
+To use incognito just change the value in parameter
+
+To use headless mode just change the value in parameter
+
+
+----------------------------------------------
+
+
+Also Tell me why here it throw exception
+
+<suite name="Suite" parallel = "tests">
+
+
+  <test name="Test">
+  	
+  	<parameter name="browser" value="chrome"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  <test name="Test2">
+  	
+  	<parameter name="browser" value="firefox"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  
+</suite> 
+
+===================================================
+
+
+05. To Achive Parallel Testing in selenium we follow 2 approach
+	
+	a. ThreadLocal class		or
+	b. Concurrent HashMap Class
+
+
+
+Lets make some changes in DriverFactory Class
+
+package utils;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class DriverFactory {
+	
+	// Driver Factory Design Pattern :: We maintain all driver setup in centralized location
+	public static void setDriver(String browser)
+	{
+		WebDriver driver = null;
+		
+		
+		// Driver Factory Design Pattern
+				if(browser.equalsIgnoreCase("CHROME"))
+				{
+					driver = new ChromeDriver();
+				}
+				
+				else if(browser.equalsIgnoreCase("EDGE"))
+				{
+					driver = new EdgeDriver();
+				}
+				
+				
+				else if(browser.equalsIgnoreCase("FIREFOX"))
+				{
+					driver = new FirefoxDriver();
+				}
+				
+				else if(browser.equalsIgnoreCase("HEADLESS"))
+				{
+					 ChromeOptions options = new ChromeOptions();
+					 options.addArguments("--headless");
+					 driver = new ChromeDriver(options);
+				}
+					
+				else if(browser.equalsIgnoreCase("INCOGNITO"))
+				{
+					ChromeOptions options = new ChromeOptions();
+					options.addArguments("--incognito");
+					driver = new ChromeDriver(options);
+				}
+				
+				
+				else 
+				{
+					throw new IllegalStateException("Invalid Browser");
+				}
+				
+				
+				DriverManagement.setDriver(driver);
+	}
+}
+
+
+
+
+In the utils Package
+	--> Create DriverManagement Class
+
+
+package utils;
+
+import org.openqa.selenium.WebDriver;
+
+public class DriverManagement {
+	
+	
+	// It will support for parallel test execution
+	private static ThreadLocal<WebDriver> threadLocal = new ThreadLocal<WebDriver>();
+	
+	
+	public static void setDriver(WebDriver driverName)
+	{
+		threadLocal.set(driverName);
+	}
+	
+	
+	public static WebDriver getDriver()
+	{
+		return threadLocal.get();
+	}
+}
+
+
+----------------------------------------------
+
+
+In the BaseTest Class lets make some other changes
+
+package base;
+
+import java.time.Duration;
+
+import org.openqa.selenium.WebDriver;
+
+
+import utils.DriverFactory;
+import utils.DriverManagement;
+
+public class BaseTest {
+	
+	public static WebDriver driver;
+	
+	public static void initialization(String browser)
+	{
+		
+		DriverFactory.setDriver(browser);
+		
+		WebDriver driver = DriverManagement.getDriver();
+		
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		
+		driver.manage().window().maximize();
+		
+		driver.get("https://demo.guru99.com/test/newtours/register.php");
+		
+	}
+}	
+
+
+
+----------------------------------------------
+
+In the RegisterPage Class instead of using extends lets follow below approach
+
+Inside Pages package
+	--> Create BasePage class
+
+
+package pages;
+
+import org.openqa.selenium.WebDriver;
+
+import utils.DriverManagement;
+
+public class BasePage {
+	
+	protected static WebDriver driver;
+	
+	
+	public BasePage()
+	{
+		driver = DriverManagement.getDriver();
+	}
+}
+
+
+----------------------------------------------
+
+
+And modify extends from BaseTest to BasePage
+
+
+package pages;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
+
+
+
+public class RegisterPage extends BasePage{
+
+	// POM Design Pattern
+	
+	@FindBy(name = "firstName")
+	WebElement firstName;
+	
+	@FindBy(name = "lastName")
+	WebElement lastName;
+	
+	@FindBy(name = "phone")
+	WebElement phone;
+	
+	@FindBy(name = "userName")
+	WebElement email;
+	
+	@FindBy(name = "address1")
+	WebElement address;
+	
+	@FindBy(name = "city")
+	WebElement city;
+	
+	@FindBy(name = "state")
+	WebElement state;
+	
+	@FindBy(name = "postalCode")
+	WebElement postalCode;
+	
+	@FindBy(name = "country")
+	WebElement country;
+	
+	@FindBy(name = "email")
+	WebElement username;
+	
+	@FindBy(name = "password")
+	WebElement password;
+	
+	@FindBy(name = "confirmPassword")
+	WebElement confirmPassword;
+	
+	@FindBy(name = "submit")
+	WebElement submit;
+	
+	
+	
+	
+	// Initialize Object Repository
+	public RegisterPage()
+	{
+		PageFactory.initElements(driver, this);
+	}
+	
+	
+	
+	// Create Associated Methods
+	public void enterFirstName(String fname)
+	{
+		this.firstName.sendKeys(fname);
+	}
+	
+	
+	public void enterLastName(String lname)
+	{
+		this.lastName.sendKeys(lname);
+	}
+	
+	
+	public void enterPhone(String phone)
+	{
+		this.phone.sendKeys(phone);
+	}
+	
+	
+	public void enterEmail(String mail)
+	{
+		this.email.sendKeys(mail);
+	}
+	
+	public void enterAddress(String addr)
+	{
+		this.address.sendKeys(addr);
+	}
+	
+	public void enterCity(String city)
+	{
+		this.city.sendKeys(city);
+	}
+	
+	public void enterState(String state)
+	{
+		this.state.sendKeys(state);
+	}
+	
+	public void enterPostalCode(String postal)
+	{
+		this.postalCode.sendKeys(postal);
+	}
+	
+	public void enterCountry(String country)
+	{
+		Select sel = new Select(this.country);
+		sel.selectByVisibleText(country);
+		
+	}
+	
+	public void enterUsername(String uname)
+	{
+		this.username.sendKeys(uname);
+	}
+	
+	public void enterPassword(String pass)
+	{
+		this.password.sendKeys(pass);
+	}
+	
+	public void enterConfirmPassword(String confirmPass)
+	{
+		this.confirmPassword.sendKeys(confirmPass);
+	}
+	
+	public void clickOnSubmit()
+	{
+		this.submit.click();
+	}
+}
+
+
+----------------------------------------------
+
+
+XML looks like below
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+
+<suite name="Suite" parallel="tests">
+
+
+  <test name="Test">
+  	
+  	<parameter name="browser" value="chrome"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  
+  <test name="Test2">
+  	
+  	<parameter name="browser" value="firefox"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  
+</suite> 
+
+===================================================
+
+
+06. Singleton Design Pattern with ThreadLocal class
+
+
+
+First Change we will do in DriverManagement
+
+package utils;
+
+import org.openqa.selenium.WebDriver;
+
+public class DriverManagement {
+	
+	
+	// It will support for parallel test execution
+	private static ThreadLocal<WebDriver> threadLocal = new ThreadLocal<WebDriver>();
+	
+	
+	// Singleton design pattern
+	private DriverManagement()
+	{
+		
+	}
+	
+	
+	public static DriverManagement getInstance()
+	{
+		return new DriverManagement();
+	}
+	
+	
+	public static void setDriver(WebDriver driverName)
+	{
+		threadLocal.set(driverName);
+	}
+	
+	
+	public WebDriver getDriver()
+	{
+		return threadLocal.get();
+	}
+}
+
+----------------------------------------------
+
+
+Second we make a change in DriverFactory class
+
+
+package utils;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class DriverFactory {
+	
+	// Driver Factory Design Pattern :: We maintain all driver setup in centralized location
+	public static void setDriver(String browser)
+	{
+		WebDriver driver = null;
+		
+		
+		// Driver Factory Design Pattern
+				if(browser.equalsIgnoreCase("CHROME"))
+				{
+					driver = new ChromeDriver();
+				}
+				
+				else if(browser.equalsIgnoreCase("EDGE"))
+				{
+					driver = new EdgeDriver();
+				}
+				
+				
+				else if(browser.equalsIgnoreCase("FIREFOX"))
+				{
+					driver = new FirefoxDriver();
+				}
+				
+				else if(browser.equalsIgnoreCase("HEADLESS"))
+				{
+					 ChromeOptions options = new ChromeOptions();
+					 options.addArguments("--headless");
+					 driver = new ChromeDriver(options);
+				}
+					
+				else if(browser.equalsIgnoreCase("INCOGNITO"))
+				{
+					ChromeOptions options = new ChromeOptions();
+					options.addArguments("--incognito");
+					driver = new ChromeDriver(options);
+				}
+				
+				
+				else 
+				{
+					throw new IllegalStateException("Invalid Browser");
+				}
+				
+				
+				DriverManagement.getInstance().setDriver(driver);
+	}
+}
+
+
+
+----------------------------------------------
+
+
+Third We make a change in BaseTest class
+
+
+package base;
+
+import java.time.Duration;
+
+import org.openqa.selenium.WebDriver;
+
+
+import utils.DriverFactory;
+import utils.DriverManagement;
+
+public class BaseTest {
+	
+	public static WebDriver driver;
+	
+	public static void initialization(String browser)
+	{
+		
+		DriverFactory.setDriver(browser);
+		
+		WebDriver driver = DriverManagement.getInstance().getDriver();
+		
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+		
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+		
+		driver.manage().window().maximize();
+		
+		driver.get("https://demo.guru99.com/test/newtours/register.php");
+		
+	}
+}	
+
+
+----------------------------------------------
+
+
+Now in the BasePage class make this change
+
+package pages;
+
+import org.openqa.selenium.WebDriver;
+
+import utils.DriverManagement;
+
+public class BasePage {
+	
+	protected static WebDriver driver;
+	
+	
+	public BasePage()
+	{
+		driver = DriverManagement.getInstance().getDriver();
+	}
+}
+----------------------------------------------
+
+
+Run with the same XML
+
+
+
+===================================================
+
+07. Inside the utils package create a Retry class
+		--> Because we cant guarentee that the test will pass every time, so we can use retry class to re-run the failed test cases
+
+
+
+package utils;
+
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
+public class Retry implements IRetryAnalyzer {
+
+	int counter = 0;
+	int maxCounter = 4;
+	
+	
+	
+	@Override
+	public boolean retry(ITestResult result) {
+		
+		if(counter < maxCounter) 
+		{
+			counter++;
+			return true;
+		}
+		
+		return false;
+	} 
+	
+	
+	
+}
+
+
+----------------------------------------------
+
+Inside utils create a class Transformer
+
+package utils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+import org.testng.IAnnotationTransformer;
+import org.testng.annotations.ITestAnnotation;
+
+public class Transformer implements IAnnotationTransformer {
+
+	@Override
+	public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
+		
+		
+		annotation.setRetryAnalyzer(Retry.class);
+	}
+	
+	
+}
+
+
+
+
+----------------------------------------------
+
+Update xml file to use transformer class
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+
+<suite name="Suite" parallel="tests">
+
+  <listeners>
+  	<listener class-name="utils.Transformer"></listener>
+  </listeners>
+	
+  <test name="Test">
+  	
+  	<parameter name="browser" value="chrome"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  
+  <test name="Test2">
+  	
+  	<parameter name="browser" value="chrome"></parameter>
+  	
+    <classes>
+      <class name="test.RegisterPageTest"/>
+    </classes>
+  </test> 
+  
+  
+</suite> 
+
+
+----------------------------------------------
+
+
+Now lets change any value from RegisterPage class and run the testng.xml file, 
+it will re-run the failed test cases 4 times and then it will fail the test case
+
+
+
+
+
+
+
+
+
+
